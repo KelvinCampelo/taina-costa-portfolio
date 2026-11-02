@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/img/:path*",
+      "destination": "https://raw.githubusercontent.com/KelvinCampelo/taina-costa-portfolio/main/img/:path*"
+    },
+    {
+      "source": "/:file(tiktests-.*)",
+      "destination": "https://raw.githubusercontent.com/KelvinCampelo/taina-costa-portfolio/main/:file"
+    }
+  ]
+}
