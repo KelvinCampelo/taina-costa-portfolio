@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tainá Costa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF7;
+  --bg-card: #FFFFFF;
+  --text: #1A1A1A;
+  --text-secondary: #5C5C5C;
+  --accent: #4A7C6F;
+  --accent-light: #E8F0ED;
+  --border: #E5E3DF;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --font-body: 'DM Sans', system-ui, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141413; --bg-card: #1E1E1C; --text: #EAEAE6;
+    --text-secondary: #9C9C96; --accent: #6BAF9E; --accent-light: #1C2B26;
+    --border: #2C2C28; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141413; --bg-card: #1E1E1C; --text: #EAEAE6;
+  --text-secondary: #9C9C96; --accent: #6BAF9E; --accent-light: #1C2B26;
+  --border: #2C2C28; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* --- LIGHTBOX --- */
+.lightbox-overlay {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,.85); align-items:center; justify-content:center;
+  cursor:zoom-out; padding:2rem;
+}
+.lightbox-overlay.active { display:flex; }
+.lightbox-overlay img {
+  max-width:95vw; max-height:90vh; border-radius:8px;
+  box-shadow:0 4px 40px rgba(0,0,0,.5); object-fit:contain;
+}
+.lightbox-close {
+  position:absolute; top:1rem; right:1.5rem; color:#fff; font-size:2rem;
+  cursor:pointer; background:none; border:none; line-height:1;
+  opacity:.8; transition:opacity .2s;
+}
+.lightbox-close:hover { opacity:1; }
+.case-page img:not(.no-lightbox) { cursor:zoom-in; transition:opacity .15s; }
+.case-page img:not(.no-lightbox):hover { opacity:.9; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+a:hover { opacity: 0.75; }
+
+.container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+
+/* --- NAV --- */
+nav {
+  position: sticky; top: 0; z-index: 10;
+  background: var(--bg); border-bottom: 1px solid var(--border); padding: 14px 0;
+}
+nav .container { display: flex; align-items: center; justify-content: space-between; }
+nav .logo { font-family: var(--font-display); font-size: 1.1rem; color: var(--text); cursor: pointer; }
+nav ul { list-style: none; display: flex; gap: 28px; }
+nav ul a {
+  font-size: 0.88rem; font-weight: 500; color: var(--text-secondary);
+  letter-spacing: 0.02em; transition: color 0.2s; cursor: pointer;
+}
+nav ul a:hover { color: var(--accent); opacity: 1; }
+
+/* --- HERO --- */
+.hero { padding: 80px 0 64px; }
+.hero-eyebrow {
+  font-size: 0.82rem; font-weight: 500; color: var(--accent);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.2rem);
+  line-height: 1.15; text-wrap: balance; margin-bottom: 20px;
+}
+.hero-bio { font-size: 1.05rem; color: var(--text-secondary); max-width: 580px; line-height: 1.7; }
+.hero-location {
+  margin-top: 20px; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; color: var(--text-secondary);
+}
+.hero-location svg { width: 14px; height: 14px; fill: var(--accent); flex-shrink: 0; }
+
+/* --- SECTIONS --- */
+section { padding: 56px 0; scroll-margin-top: 60px; }
+section + section { border-top: 1px solid var(--border); }
+.section-label {
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 32px;
+}
+
+/* --- SKILLS --- */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+.skill-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 24px;
+}
+.skill-card h3 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 8px; }
+.skill-card p { font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* --- CASE STUDIES --- */
+.case-study {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 32px; transition: box-shadow 0.25s, border-color 0.25s; cursor: pointer;
+}
+.case-study:hover { border-color: var(--accent); box-shadow: 0 4px 24px rgba(0,0,0,0.06); }
+.case-study + .case-study { margin-top: 20px; }
+.case-study .tag {
+  display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-light); padding: 4px 10px;
+  border-radius: 100px; margin-bottom: 14px;
+}
+.case-study h3 { font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 10px; }
+.case-study p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.65; margin-bottom: 14px; }
+.case-study .meta { font-size: 0.82rem; font-style: italic; color: var(--text-secondary); opacity: 0.8; }
+.case-arrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; font-weight: 500; color: var(--accent); margin-top: 6px;
+}
+.case-arrow svg { width: 14px; height: 14px; fill: var(--accent); transition: transform 0.2s; }
+.case-study:hover .case-arrow svg { transform: translateX(3px); }
+
+/* --- PUBLICATIONS --- */
+.pub-list { display: flex; flex-direction: column; gap: 18px; }
+.pub-item { padding-left: 18px; border-left: 2px solid var(--accent); }
+.pub-item .pub-title { font-weight: 500; font-size: 0.92rem; line-height: 1.55; }
+.pub-item .pub-venue { font-size: 0.82rem; color: var(--text-secondary); margin-top: 2px; }
+.pub-item a.pub-title:hover { text-decoration: underline; }
+
+/* --- CONTACT --- */
+.contact-section { text-align: center; padding: 72px 0 80px; }
+.contact-section h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 12px; }
+.contact-section p { color: var(--text-secondary); margin-bottom: 28px; font-size: 0.95rem; }
+.contact-links { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.contact-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 24px; border-radius: 100px; font-size: 0.9rem;
+  font-weight: 500; transition: all 0.2s;
+}
+.contact-btn.primary { background: var(--accent); color: #fff; }
+.contact-btn.primary:hover { opacity: 0.88; }
+.contact-btn.secondary { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
+.contact-btn.secondary:hover { border-color: var(--accent); }
+.contact-btn svg { width: 16px; height: 16px; }
+
+/* --- FOOTER --- */
+footer { border-top: 1px solid var(--border); padding: 24px 0; text-align: center; font-size: 0.8rem; color: var(--text-secondary); }
+
+/* --- CASE STUDY PAGE --- */
+.case-page { display: none; padding: 40px 0 80px; }
+.case-page.active { display: block; }
+.back-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.88rem; font-weight: 500; color: var(--accent); margin-bottom: 40px; cursor: pointer;
+}
+.back-link:hover { opacity: 0.75; }
+.back-link svg { width: 14px; height: 14px; transform: rotate(180deg); }
+
+.case-page .case-header { margin-bottom: 48px; }
+.case-page .case-header .tag {
+  display: inline-block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+  color: var(--accent); background: var(--accent-light); padding: 4px 10px;
+  border-radius: 100px; margin-bottom: 16px;
+}
+.case-page .case-header h1 {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.4rem);
+  line-height: 1.2; margin-bottom: 16px;
+}
+.case-page .case-header .case-meta {
+  font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;
+}
+.case-page .case-header .case-meta strong { color: var(--text); font-weight: 500; }
+
+.case-page h2 {
+  font-family: var(--font-display); font-size: 1.4rem;
+  margin: 48px 0 16px; padding-top: 8px;
+}
+.case-page h3 {
+  font-family: var(--font-display); font-size: 1.1rem; margin: 28px 0 10px;
+}
+.case-page p { font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 14px; }
+.case-page ul, .case-page ol {
+  margin: 10px 0 18px 20px; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+}
+.case-page li { margin-bottom: 6px; }
+.case-page blockquote {
+  border-left: 3px solid var(--accent); padding: 16px 20px; margin: 20px 0;
+  background: var(--accent-light); border-radius: 0 8px 8px 0;
+  font-style: italic; font-size: 0.92rem; color: var(--text-secondary); line-height: 1.7;
+}
+
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px; margin: 24px 0;
+}
+.stat-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 10px; padding: 20px; text-align: center;
+}
+.stat-card .stat-value {
+  font-family: var(--font-display); font-size: 1.6rem; color: var(--accent);
+  margin-bottom: 4px;
+}
+.stat-card .stat-label { font-size: 0.78rem; color: var(--text-secondary); }
+
+.insight-table {
+  width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.88rem;
+}
+.insight-table th, .insight-table td {
+  text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--border);
+}
+.insight-table th {
+  font-weight: 600; font-size: 0.8rem; text-transform: uppercase;
+  letter-spacing: 0.04em; color: var(--accent);
+}
+.insight-table td { color: var(--text-secondary); line-height: 1.55; }
+.insight-table td strong { color: var(--text); font-weight: 500; }
+
+.reflection-box {
+  background: var(--accent-light); border-radius: 12px; padding: 24px; margin: 24px 0;
+}
+.reflection-box h3 { margin-top: 0; color: var(--text); }
+.reflection-box ul { margin-left: 18px; }
+.reflection-box li { color: var(--text-secondary); margin-bottom: 8px; font-size: 0.88rem; }
+.reflection-box li strong { color: var(--text); font-weight: 500; }
+
+.case-img {
+  width: 100%; border-radius: 12px; margin: 24px 0;
+  border: 1px solid var(--border);
+}
+.case-img-caption {
+  font-size: 0.8rem; color: var(--text-secondary); text-align: center;
+  margin: -16px 0 24px; font-style: italic;
+}
+.case-img-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;
+}
+.case-img-grid img { width: 100%; border-radius: 10px; border: 1px solid var(--border); }
+@media (max-width: 480px) { .case-img-grid { grid-template-columns: 1fr; } }
+
+/* Hide main when case is open */
+body.case-open .main-content { display: none; }
+body.case-open footer { display: none; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .hero { padding: 48px 0 40px; }
+  section { padding: 40px 0; }
+  .case-study { padding: 24px; }
+  nav ul { gap: 18px; }
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+a:focus-visible, .case-study:focus-visible, .contact-btn:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="#" class="logo" onclick="showHome(event)">Tainá Costa</a>
+    <ul id="nav-links">
+      <li><a href="#work" onclick="navigateTo('work', event)" data-nav="home">Work</a></li>
+      <li><a href="#cases" onclick="navigateTo('cases', event)" data-nav="home">Cases</a></li>
+      <li><a href="#publications" onclick="navigateTo('publications', event)" data-nav="home">Publications</a></li>
+      <li><a href="#contact" onclick="navigateTo('contact', event)" data-nav="home">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ========== MAIN CONTENT ========== -->
+<div class="main-content">
+
+<header class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">UX Researcher in Digital Health</p>
+    <h1>Hi, I'm Tainá.</h1>
+    <p class="hero-bio">I design health and fun experiences around the people who use them, combining a background in Biomedical Sciences and Public Health with human-centred design.</p>
+    <span class="hero-location">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+      Porto, Portugal
+    </span>
+  </div>
+</header>
+
+<section id="work">
+  <div class="container">
+    <p class="section-label">What I do</p>
+    <div class="skills-grid">
+      <div class="skill-card"><h3>User Research</h3><p>Interviews, surveys, co-design sessions and literature reviews</p></div>
+      <div class="skill-card"><h3>Design Insights</h3><p>Personas, design requirements, user journeys, prototypes and usability testing</p></div>
+      <div class="skill-card"><h3>Product Collaboration</h3><p>Turning user needs into tickets and clear requirements for development teams</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="cases">
+  <div class="container">
+    <p class="section-label">Case Studies</p>
+
+    <div class="case-study" tabindex="0" role="article" onclick="showCase('ikigai')">
+      <span class="tag">Erasmus+ · 2025–2026</span>
+      <h3>Ikigai Play Toolkit</h3>
+      <p>A ludic toolkit that builds digital health literacy among older adults, developed by a European consortium across 8 countries. I worked on the literature review, design requirements and activity design, and took part in the pilot evaluation (318 questionnaires).</p>
+      <span class="meta">UX Researcher · Erasmus+ project</span>
+      <div class="case-arrow">Read case study <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+
+    <div class="case-study" tabindex="0" role="article" onclick="showCase('motivamed')">
+      <span class="tag">Academic · 2025</span>
+      <h3>MotivaMed</h3>
+      <p>An app concept that helps people stay on track with their medication by adapting to their routine and what motivates them. Survey with 106 respondents, competitive benchmark and high-fidelity prototype.</p>
+      <span class="meta">Market research &amp; prototype design · Academic project</span>
+      <div class="case-arrow">Read case study <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+
+    <div class="case-study" tabindex="0" role="article" onclick="showCase('tiktests')">
+      <span class="tag">Product · 2024–2025</span>
+      <h3>TikTests</h3>
+      <p>Redesign of a personal colour analysis platform, from user research to launch at Web Summit Lisbon 2025.</p>
+      <span class="meta">Product Owner &amp; UX Researcher</span>
+      <div class="case-arrow">Read case study <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    </div>
+
+  </div>
+</section>
+
+<section id="publications">
+  <div class="container">
+    <p class="section-label">Publications</p>
+    <div class="pub-list">
+      <div class="pub-item">
+        <a href="https://www.igi-global.com/chapter/ikigai-play/401908" class="pub-title" target="_blank" rel="noopener">Ikigai Play: Towards an Ikigai Paradigm of Healthy and Active Ageing in Europe</a>
+        <p class="pub-venue">Book chapter · IGI Global (2026)</p>
+      </div>
+      <div class="pub-item">
+        <a href="https://link.springer.com/chapter/10.1007/978-3-032-26999-7_16" class="pub-title" target="_blank" rel="noopener">IKIGAI PLAY: Requirements for the Development of a Lúdic Toolkit Oriented to Smart Ageing Through a Human-Centered Design Approach</a>
+        <p class="pub-venue">Conference paper · ArtsIT (2026)</p>
+      </div>
+      <div class="pub-item">
+        <span class="pub-title">Combatendo a mpox na era digital: um mapeamento sistemático de aplicativos móveis de saúde no Brasil</span>
+        <p class="pub-venue">Extended abstract · 1st International Digital Health Meeting (Fiocruz Ceará) · Revista de Saúde Digital e Tecnologias Educacionais (2025) · First author</p>
+      </div>
+      <div class="pub-item">
+        <a href="https://www.mdpi.com/2075-1729/12/8/1160" class="pub-title" target="_blank" rel="noopener">eHealthResp, a Digital Intervention to Improve Antibiotic Prescribing in Respiratory Infections: A Pilot Study</a>
+        <p class="pub-venue">Journal article · Life, 12(8), 1160 (2022)</p>
+      </div>
+      <div class="pub-item">
+        <a href="https://www.mdpi.com/2227-9032/10/8/1385" class="pub-title" target="_blank" rel="noopener">Improving Pharmacists' Awareness of Inadequate Antibiotic Use for URTIs through an Educational Intervention: A Pilot Study</a>
+        <p class="pub-venue">Journal article · Healthcare, 10(8), 1385 (2022)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="contact-section">
+  <div class="container">
+    <h2>Let's talk</h2>
+    <p>Open to UX research opportunities in digital health, civic tech and beyond.</p>
+    <div class="contact-links">
+      <a href="mailto:costataina.tc@gmail.com" class="contact-btn primary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        costataina.tc@gmail.com
+      </a>
+      <a href="https://linkedin.com/in/taina-costa1606" target="_blank" rel="noopener" class="contact-btn secondary">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43A2.07 2.07 0 1 1 5.34 3.3a2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77A1.75 1.75 0 0 0 0 1.73v20.54A1.75 1.75 0 0 0 1.77 24h20.45A1.75 1.75 0 0 0 24 22.27V1.73A1.75 1.75 0 0 0 22.22 0z"/></svg>
+        LinkedIn
+      </a>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main-content -->
+
+<!-- ========== IKIGAI PLAY TOOLKIT ========== -->
+<div class="case-page" id="case-ikigai">
+  <div class="container">
+    <a class="back-link" onclick="showHome()">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to portfolio
+    </a>
+
+    <div class="case-header">
+      <span class="tag">Erasmus+ · 2025–2026</span>
+      <h1>Ikigai Play Toolkit</h1>
+      <p style="font-size:1.1rem; color:var(--text-secondary); margin-top:-8px; margin-bottom:16px;">Designing a ludic intervention to build digital health literacy among older adults across Europe</p>
+      <blockquote style="border-left:3px solid var(--accent); padding:12px 16px; margin:16px 0 24px; background:var(--accent-light); border-radius:0 8px 8px 0;">
+        <strong>In short:</strong> Older adults are being left behind as healthcare goes digital. As part of a European Erasmus+ consortium, I helped research, design and test a toolkit of playful activities that builds digital and health skills, and learned that the best way to teach digital skills to this audience was not a digital product.
+      </blockquote>
+      <p class="case-meta">
+        <strong>Role:</strong> UX Researcher (Master's research in Public Health)<br>
+        <strong>Project:</strong> SMARTageCARE, Erasmus+ (9 partners, 8 European countries), coordinated by the University of Porto (FBAUP)<br>
+        <strong>Timeline:</strong> Jan 2025 – Aug 2026<br>
+        <strong>Methods:</strong> Literature review, affinity mapping, surveys, personas &amp; scenarios, design requirements, brainstorming, pilot evaluation<br>
+        <strong>Outcome:</strong> Final toolkit of 38 activities, a co-authored book chapter (IGI Global, 2026) and a conference paper (ArtsIT, 2026)
+      </p>
+    </div>
+
+    <img src="img/ikigai-toolkit.jpg" alt="The SmartAgeCare toolkit: activity cards, handbooks and game materials laid out" class="case-img">
+
+    <h2>The problem</h2>
+    <p>Health services across Europe are moving online: appointments, test results, prescriptions, teleconsultations. For many older adults, this turns digital skills into a condition for accessing care.</p>
+    <p>Most existing digital literacy programmes are designed for older adults rather than with them, and focus on technical skills while ignoring what keeps people engaged: motivation, confidence and fear of making mistakes.</p>
+    <p>The question: how might we help older adults across very different European contexts build digital health skills in a way that feels meaningful, safe and fun?</p>
+
+    <h2>My role</h2>
+    <p>I was part of the design team at the University of Porto (FBAUP), which led the toolkit's development for the whole consortium. My contributions:</p>
+    <ul>
+      <li><strong>Research:</strong> collaborated on the literature review that grounded the toolkit (published as a book chapter)</li>
+      <li><strong>Requirements:</strong> created the 7 design requirements that guided prototyping (published as a conference paper)</li>
+      <li><strong>Design:</strong> contributed to several of the toolkit's activities and led the design of 10 of them</li>
+      <li><strong>Testing:</strong> took part in the co-design and pilot sessions in Portugal and applied the evaluation questionnaire to participants</li>
+      <li><strong>Dissemination:</strong> presented the toolkit at project events (Portugal and Belgium)</li>
+    </ul>
+
+    <h2>1. Discover: understanding older adults in 8 countries</h2>
+    <p><strong>Participatory workshops.</strong> Local partners ran co-creation workshops with 96 "Senior Ambassadors" (aged 65+) in 8 countries. Using affinity mapping, participants named their own problems and solutions, generating 268 pain points and 272 solutions across three themes: digital transition, eHealth and citizenship.</p>
+
+    <img src="img/ikigai-workshop-pt.jpg" alt="Affinity mapping session in Portugal" class="case-img">
+    <p class="case-img-caption">Affinity mapping session in Portugal</p>
+
+    <p><strong>Technology use survey (n=57).</strong> It showed a clear pattern:</p>
+    <ul>
+      <li>93% use their smartphone for calls, but struggle with anything beyond that, such as installing apps or using social media</li>
+      <li>They recognised on average only 4.8 out of 10 common app icons</li>
+      <li>26% reported a general fear of their phone, mostly driven by fear of scams and fraud</li>
+    </ul>
+
+    <p><strong>Literature review.</strong> The consortium screened 330 studies and selected 168 to map each country's context and the evidence behind the Ikigai philosophy (the Japanese concept of "a reason for being"), which research links to wellbeing and social participation in later life.</p>
+
+    <p><strong>Key insight:</strong> the problem was not a lack of digital tools. It was a mismatch between the tools available and older adults' abilities, motivations and contexts. Fear of making mistakes was as big a barrier as missing skills.</p>
+
+    <h2>2. Define: personas and design requirements</h2>
+    <p>The design team turned the findings into <strong>4 personas with usage scenarios</strong>, one for each theme (digital transition, eHealth, citizenship) plus one for the facilitator who runs the sessions. They gave a team spread across 8 countries a shared reference point for design decisions.</p>
+    <p>Below there is an one of the 4 personas and scenarios created related to e-health axis</p>
+
+    <img src="img/ikigai-persona.jpg" alt="Persona card: Teresa Marciniak, 76, Poland — struggles, interests, ambitions and desires mapped" class="case-img">
+    <p class="case-img-caption">One of the 4 personas: Teresa Marciniak, e-health axis</p>
+
+    <img src="img/ikigai-scenario.jpg" alt="Usage scenario describing Teresa's experience with the SmartAgeCare toolkit activities" class="case-img">
+    <p class="case-img-caption">Teresa's usage scenario with the toolkit</p>
+
+    <p>I then contributed to defining <strong>7 design requirements</strong>, that combine the finds from discovery phase and the Ikigai philosophy with positive play framework which bridged the research and the prototyping:</p>
+    <ol>
+      <li><strong>Utility, simplicity and adaptability:</strong> activities should feel useful and intuitive, and adapt to each person's needs and goals</li>
+      <li><strong>Progress visualisation and tracking:</strong> users should be able to see their progress and reflect on it</li>
+      <li><strong>A safe space to experiment and learn:</strong> mistakes are treated as learning opportunities, to build confidence step by step</li>
+      <li><strong>Integration with daily routines:</strong> activities should connect to everyday life and support lasting habits</li>
+      <li><strong>Flow and challenge balance:</strong> difficulty should match each person's skills, avoiding both frustration and boredom</li>
+      <li><strong>Safe simulation of digital risks:</strong> scenarios such as misinformation or online fraud are practised in a controlled, guided setting</li>
+      <li><strong>Content relevant to older adults and caregivers:</strong> content should also speak to their support networks, strengthening social connection</li>
+    </ol>
+
+    <img src="img/ikigai-paper.jpg" alt="Published conference paper: IKIGAI PLAY — Requirements for the development of a ludic toolkit" class="case-img">
+    <p class="case-img-caption">The full paper can find here: <a href="https://link.springer.com/chapter/10.1007/978-3-032-26999-7_16" target="_blank">Springer</a></p>
+
+    <h2>3. Design: key decisions</h2>
+    <p><strong>Analogue, not digital.</strong> A purely digital tool would have reproduced the very barrier we were trying to remove, especially for the 26% who feared their device. The toolkit became a physical kit (card sets, a facilitator manual, a solutions book and printable materials) that brings real smartphones in only where needed.</p>
+    <p><strong>Modular, not a single game.</strong> The first idea was one serious game. The diversity found in the workshops pointed instead to <strong>43 activities across 4 modules</strong> (Ikigai, Digital Transition, eHealth, Citizenship) that facilitators can combine for their group.</p>
+    <p><strong>Motivation first.</strong> Grounded in Ikigai and the Positive Play framework, the toolkit treats digital tools as a means to reach personal goals, not as an end in themselves.</p>
+    <p><strong>Accessible by design.</strong> High-legibility typography and high-contrast colour palettes throughout.</p>
+
+    <h3>Activities I designed</h3>
+    <p>I created more than 10 activities across the toolkit. These are the four I led from concept to final version:</p>
+    <ul>
+      <li><strong>Digital Health Detectives:</strong> fights online health misinformation using <em>prebunking</em>, where people learn to resist manipulation by seeing weakened examples of it first. I built realistic email, Facebook and WhatsApp mockups featuring common tactics such as emotional appeals and fake authority, informed by the survey data.</li>
+      <li><strong>Wearables in Elderly Health Care:</strong> introduces 10 wearable devices for health monitoring, activity tracking and emergency assistance.</li>
+      <li><strong>You Are Probably Wrong About Ageism</strong> and <strong>…About Elder Abuse:</strong> myth-busting quizzes adapted from Gapminder's method, built on WHO and European data. Because of the sensitive topic, the elder abuse activity includes support materials and local help resources.</li>
+    </ul>
+
+    <h2>4. Test: pilot in Portugal, Italy and Poland</h2>
+    <p>The toolkit was piloted with older adults in three countries chosen for their different digital and social contexts. After each activity, participants answered a short questionnaire based on game usability heuristics (PLAY). In total, <strong>318 questionnaires</strong> were collected across four dimensions (scale 1–5):</p>
+
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-value">4.29</div><div class="stat-label">Performance</div></div>
+      <div class="stat-card"><div class="stat-value">4.01</div><div class="stat-label">Perceived effectiveness</div></div>
+      <div class="stat-card"><div class="stat-value">3.94</div><div class="stat-label">Efficiency</div></div>
+      <div class="stat-card"><div class="stat-value">3.79</div><div class="stat-label">Usability</div></div>
+    </div>
+
+    <p><strong>What we learned:</strong></p>
+    <ul>
+      <li><strong>People engaged, but the mechanics were the weak spot.</strong> Participants completed tasks and felt safe, but abstract rules confused them. For example, sorting cards to simulate a phone screen didn't work.</li>
+      <li><strong>Real beats simulated.</strong> Hands-on use of real devices and scam stories from participants' own lives worked far better than fictional scenarios.</li>
+      <li><strong>Relevance depends on context.</strong> Each country rated a different module highest, which supported the modular structure.</li>
+      <li><strong>The facilitator matters.</strong> Sessions flowed only when facilitators adapted activities to very mixed groups, from people who had never used a smartphone to people already using AI tools.</li>
+    </ul>
+
+    <img src="img/ikigai-workshop-it.jpg" alt="Pilot session with older adults in Italy" class="case-img">
+    <p class="case-img-caption">Pilot sessions in Italy</p>
+
+    <h2>5. Iterate: refining the toolkit</h2>
+    <p>The most important finding was one we didn't expect: <strong>competitive game mechanics that penalised health events felt stigmatising</strong>. Losing points because of an illness meant scoring someone's own life story. We removed them and refocused the eHealth module on private self-assessment and peer dialogue.</p>
+    <p>Overall, 5 activities were removed, giving a <strong>final version of 38 activities</strong>, now publicly available on the project website.</p>
+
+    <h2>Outcome</h2>
+    <ul>
+      <li>Final Ikigai Play Toolkit published for use in care homes, day centres, senior universities and community groups</li>
+      <li>Book chapter: <em>Ikigai Play: Towards an Ikigai Paradigm of Healthy and Active Ageing in Europe</em> (IGI Global, 2026)</li>
+      <li>Conference paper on the design requirements (ArtsIT, 2026)</li>
+      <li>My Master's dissertation, documenting the full design process and my contributions</li>
+    </ul>
+
+    <div class="reflection-box">
+      <h3>What I'd do differently</h3>
+      <ul>
+        <li><strong>Involve older adults in every phase.</strong> They shaped the discovery and testing phases, but ideation and prototyping were done by the team. Co-designing the activities with them could have caught issues like the stigmatising mechanics earlier.</li>
+        <li><strong>Measure learning, not just reactions.</strong> The pilot captured how people felt right after each activity. A before-and-after design with a validated digital health literacy scale would show whether skills actually improved.</li>
+        <li><strong>Design for the facilitator from day one.</strong> The toolkit only works with good facilitation, so facilitator training deserves the same design attention as the activities.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== MOTIVAMED ========== -->
+<div class="case-page" id="case-motivamed">
+  <div class="container">
+    <a class="back-link" onclick="showHome()">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to portfolio
+    </a>
+
+    <div class="case-header">
+      <span class="tag">Academic · 2025</span>
+      <h1>MotivaMed</h1>
+      <p class="case-subtitle">Rethinking medication adherence: from "when to take it" to "why it matters"</p>
+      <blockquote class="case-blockquote">In Portugal, up to half of people with chronic conditions don't take their medication as prescribed. Most apps focus on reminders and tracking. MotivaMed asks a different question: what if the app also helped people understand <em>why</em> their medication matters to them?</blockquote>
+      <p class="case-meta">
+        <strong>Role:</strong> Market research &amp; prototype design<br>
+        <strong>Context:</strong> Digital Health Course, ICBAS &amp; FFUP (University of Porto)<br>
+        <strong>Team:</strong> 4 Master's students<br>
+        <strong>Methods:</strong> Competitive benchmark, online survey (n=106), high-fidelity prototyping (Figma)<br>
+        <strong>Outcome:</strong> High-fidelity prototype + full concept pitch
+      </p>
+    </div>
+
+    <h2>The problem</h2>
+    <p>An estimated 200,000 deaths and €125 billion in costs per year in Europe are linked to medication non-adherence. In Portugal, roughly half of people with chronic conditions don't take their medication as prescribed.</p>
+    <p>Most existing apps treat adherence as a logistics problem: set a reminder, check a box. But research shows that how people feel about their treatment, whether they understand it, and whether it fits their life, matters just as much as remembering the dose.</p>
+
+    <h2>My role</h2>
+    <ul>
+      <li><strong>Market research:</strong> competitive analysis of 5 apps and an online survey (n=106) about medication habits and attitudes toward digital health tools</li>
+      <li><strong>Prototype:</strong> I designed the high-fidelity prototype in Figma, translating research findings into the interface, interactions and visual identity</li>
+    </ul>
+
+    <h2>1. Research</h2>
+    <h3>Competitive benchmark</h3>
+    <p>We reviewed five medication apps (MyTherapy, Medisafe, PillsTime, CareClinic and Mediteo) and found:</p>
+    <ul>
+      <li>Little personalisation, which leads people to give up</li>
+      <li>Poor usability for older adults, who are often the ones taking the most medication</li>
+    </ul>
+
+    <h3>Survey (n=106)</h3>
+    <p>We ran an anonymous, GDPR-compliant survey in Portugal about difficulties with medication and interest in a digital solution.</p>
+    <ul>
+      <li>63% take medication regularly, and another 11% used to</li>
+      <li>About 40% struggle to follow their medication at least sometimes</li>
+      <li>Forgetting was by far the main reason (71% of those who struggle), followed by a routine that doesn't fit the medication schedule (10%)</li>
+      <li>65% rated a personalised app as useful (4–5 on a 5-point scale)</li>
+      <li>44% would find access to a professional (e.g. a pharmacist) very useful, and another 43% would consider it depending on cost</li>
+    </ul>
+
+    <p><strong>What people valued most in a digital solution:</strong></p>
+    <table class="stats-table">
+      <thead><tr><th>Feature</th><th>%</th></tr></thead>
+      <tbody>
+        <tr><td>Personalised reminders</td><td>76%</td></tr>
+        <tr><td>Clear, simple information</td><td>48%</td></tr>
+        <tr><td>Contact with a health professional</td><td>44%</td></tr>
+        <tr><td>Symptom and side-effect tracking</td><td>41%</td></tr>
+        <tr><td>Adapting to my daily routine</td><td>37%</td></tr>
+        <tr><td>Motivational or emotional support</td><td>18%</td></tr>
+      </tbody>
+    </table>
+
+    <p><strong>Open answers added nuance:</strong> reminders showing a photo or the name of each medication (suggested by a pharmacy technician, thinking of older polymedicated patients), integration with the national health service app for prescription renewal (SNS24), support for tapering off medication, and some scepticism: <em>"All people need is more useless apps and digital dependency…"</em></p>
+
+    <h2>2. Design</h2>
+    <h3>Personalisation starts at onboarding</h3>
+    <p>Instead of only asking for a list of medications, onboarding gets to know the person:</p>
+    <ul>
+      <li><strong>About you:</strong> basic profile and routine</li>
+      <li><strong>Daily inspiration:</strong> <em>"What inspires you to take care of your health?"</em> (family, independence, quality of life…)</li>
+      <li><strong>Add medications:</strong> manually, or by scanning the packaging with the camera</li>
+      <li><strong>Motivation style:</strong> how they prefer to be encouraged, and the tone of voice they want</li>
+    </ul>
+
+    <img src="img/motivamed-onboarding.jpg" alt="MotivaMed onboarding flow: 4 screens showing profile setup, daily inspirations, medication entry, and motivation style selection" class="case-img">
+
+    <h3>A companion, not just an alarm</h3>
+    <ul>
+      <li><strong>Daily personalised message</strong> connected to what motivates the user</li>
+      <li><strong>Today's medications</strong> at a glance</li>
+      <li><strong>MotivaAI,</strong> an AI assistant for questions about the medication routine (with health disclaimers)</li>
+    </ul>
+
+    <img src="img/motivamed-home.jpg" alt="MotivaMed main screens: medication scanning, personalised dashboard with daily message, and MotivaAI chatbot" class="case-img">
+
+    <h3>Light gamification</h3>
+    <p>Each dose taken earns points, which unlock <strong>badges</strong>, app <strong>themes</strong> and a <strong>companion</strong> (a seed that grows with consistent use). The goal was to make progress visible and rewarding without feeling childish.</p>
+
+    <img src="img/motivamed-rewards.jpg" alt="MotivaMed rewards screens: badges, companion evolution from seed, and unlockable app themes" class="case-img">
+
+    <h2>Outcome</h2>
+    <ul>
+      <li>High-fidelity prototype covering onboarding, the daily routine, medication scanning, an AI assistant and gamification</li>
+      <li>Full concept presented in a final pitch, including market analysis and business model</li>
+    </ul>
+
+    <div class="reflection-box">
+      <h3>What I'd do differently</h3>
+      <ul>
+        <li><strong>Survey the people we design for.</strong> 72% of respondents were aged 18–34 and almost half had a health background, while the app targets people with chronic conditions, including older adults taking several medications. I'd recruit through pharmacies, clinics and senior associations.</li>
+        <li><strong>Follow the data, even when it challenges the idea.</strong> Respondents valued personalised reminders (76%) and clear information (48%) most, while motivational support came last (18%). Our concept was built around motivation. I'd make reminders and clarity the core, and treat motivation as a hypothesis to test.</li>
+        <li><strong>Test the prototype with users.</strong> The project ended at the prototype stage. Usability testing, especially with older adults, would be the next step. My later work on the SMARTageCARE project showed that game mechanics can feel patronising or stigmatising in health contexts, so I'd test the gamification carefully.</li>
+        <li><strong>Consider fitting into existing tools.</strong> Some respondents didn't want <em>another</em> app. Integration with platforms people already use, such as SNS24, could lower the barrier to adoption.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ========== TIKTESTS ========== -->
+<div class="case-page" id="case-tiktests">
+  <div class="container">
+    <a class="back-link" onclick="showHome()">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to portfolio
+    </a>
+
+    <div class="case-header">
+      <span class="tag">Product · 2024–2025</span>
+      <h1>TikTests</h1>
+      <p class="case-meta">
+        <strong>Role:</strong> Product Owner &amp; UX Researcher · <strong>Timeline:</strong> Apr 2024 – Nov 2025<br>
+        <strong>Methods:</strong> in-product survey (n=84) · user interviews (n=2) · competitive benchmarking (10 products) · personas · Value Proposition Canvas · sitemap &amp; user flows
+      </p>
+    </div>
+
+    <p class="case-summary">TikTests is a Brazilian web app that finds your personal colour palette from a selfie. Users liked the test (86% rated it 4 or 5 out of 5), but the result stopped at "these are your colours". Research showed people wanted to know how to use them: 80% asked for practical tips. I led the discovery that rebuilt the result around everyday use, shaped a freemium/premium model, and fed into the new version launched at Web Summit Lisbon 2025.</p>
+
+    <h2>Context</h2>
+    <p>TikTests had a working free test and a large audience: about 336k active users, mostly in Brazil (~319k), followed by Portugal (~9.5k) and the US (~4.3k). But the team was restructuring the product and needed to decide what to build next. My role was to find out who our users were, what they valued, and where the experience fell short, and then turn that into product decisions and backlog priorities.</p>
+
+    <h3>Where we started</h3>
+    <p>The old home page was a stack of test cards ("Deixa com o Tik", "Colorimetria"…) with a call to action on each. It never explained what TikTests was, how the test worked or why anyone should trust it. Users had to jump straight into a test.</p>
+    <img src="tiktests-old-homepage.jpg" alt="Old TikTests homepage showing test cards" style="width:100%;border-radius:var(--radius);margin:1.5rem 0">
+
+    <h2>Research questions</h2>
+    <ul>
+      <li>Why do people look for personal colour analysis, and what brings them to TikTests?</li>
+      <li>How do they experience the current test: what works, and what frustrates them?</li>
+      <li>What would make the result more useful, and is there real value in a paid version?</li>
+    </ul>
+
+    <h2>Approach</h2>
+
+    <h3>1. Heatmap analysis</h3>
+    <p>12 months of interaction data, Hotjar. My first step was to look at what users actually did on the test page before asking them anything. I focused on the help sections, the photo setup options and the upload step.</p>
+    <img src="tiktests-heatmap-report.png" alt="Heatmap analysis report with key findings and mobile heatmap" style="width:100%;border-radius:var(--radius);margin:1.5rem 0">
+
+    <h3>2. In-product experience survey (n=84)</h3>
+    <p>A pop-up on the result page invited every user who completed the colour test to answer, so feedback was captured right after the experience, while it was still fresh. It covered four blocks: current experience, future experience, suggestions and profile.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0;align-items:start">
+      <img src="tiktests-survey-experience.png" alt="Survey: experience rating and result understanding" style="width:100%;border-radius:var(--radius)">
+      <img src="tiktests-survey-wants.png" alt="Survey: what users wanted and improvement suggestions" style="width:100%;border-radius:var(--radius)">
+    </div>
+
+    <h3>3. Semi-structured interviews (n=2, ~20 min each, recorded with consent)</h3>
+    <p>The script moved from first contact, to the test experience, to motivations and expectations. I asked about real recent situations ("Think of the last time you chose an outfit… did your palette influence it?") to get beyond opinions to actual behaviour.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin:1.5rem 0;align-items:start">
+      <img src="tiktests-interview-1.png" alt="Interview script: introduction and ice-breaker" style="width:100%;border-radius:var(--radius)">
+      <img src="tiktests-interview-2.png" alt="Interview script: first contact and test experience" style="width:100%;border-radius:var(--radius)">
+    </div>
+
+    <h3>4. Competitive benchmarking of 10 similar products</h3>
+    <p>I captured screenshots of each one, compared their flows and results side by side, and pulled out patterns and ideas worth adapting. The market split into two groups:</p>
+    <img src="tiktests-competitors-clean.png" alt="Competitive benchmarking cards comparing products and their limitations" style="width:100%;border-radius:var(--radius);margin:1.5rem 0">
+    <ul>
+      <li><strong>Automated AI tools</strong> (e.g. StyleDNA, MyBestColors): scalable, but technical, needing specific photos or prior knowledge, and with little emotional appeal or engagement.</li>
+      <li><strong>Human experts</strong> (e.g. Wishi, image consultants on Instagram/TikTok): personal and engaging, but expensive, manual and hard to scale.</li>
+    </ul>
+    <p>No one combined automated, affordable analysis with a fun, visual and personal experience. That gap became TikTests' positioning.</p>
+
+    <h3>5. Synthesis</h3>
+    <p>I turned the findings into personas and Value Proposition Canvases, then into the sitemap and flows for the new version.</p>
+    <img src="tiktests-sitemap-clean.png" alt="Sitemap and user flows for the new version" style="width:100%;border-radius:var(--radius);margin:1.5rem 0">
+
+    <h2>Key findings</h2>
+
+    <h3>1. The test works; the result doesn't go far enough.</h3>
+    <p>86% rated the experience 4–5/5, and 83% found it easy to understand. Speed (65%) and clarity (51%) were what people liked most. But only 69% said the result fully made sense to them, and almost 30% said "partially".</p>
+
+    <h3>2. People want to know how to <em>use</em> their colours, not just which ones they are.</h3>
+    <p>80% wanted practical tips (clothes, make-up) and 60% wanted visual examples. In interviews, restrictive advice ("avoid pastels") frustrated users, especially when a work dress code forced them to wear colours outside their palette.</p>
+
+    <blockquote>"I really liked the result, it was impressive. But I missed something to help me when I need to wear a colour that isn't in my palette, like at events or at work."</blockquote>
+
+    <h3>3. Low cost brings people in; doubts about accuracy hold them back.</h3>
+    <p>An in-person colour consultation can cost around R$600, and that was a key reason to try a digital test. This matched the benchmarking: affordable options felt cold, and engaging ones were expensive. But users questioned whether a photo-based test could be accurate, especially for very fair skin.</p>
+
+    <h3>4. Interest in a premium version is high, but willingness to pay is uncertain.</h3>
+    <p>73% were interested in a more detailed result, yet only 38% said they would definitely pay R$20 for it (43% said "maybe").</p>
+
+    <h3>5. The audience is older than expected.</h3>
+    <p>57% of respondents were 35 or older, so the product could not be designed for Gen Z alone.</p>
+
+    <h3>6. Our own survey got in the way.</h3>
+    <p>Several users reported that the feedback pop-up appeared over the result before they had finished reading it. The research tool was interrupting the most important moment of the experience.</p>
+
+    <h2>Personas</h2>
+    <img src="tiktests-personas.jpg" alt="Persona cards: Maria (Gen Z image professional) and Beth (Millennial beauty professional)" style="width:100%;border-radius:var(--radius);margin:1.5rem 0">
+    <p><strong>Maria — Gen Z image professional.</strong> Works with personal image and creates content. Wants quick, practical answers for real situations (dress codes, social posts) and creative "hacks" rather than rules.</p>
+    <p><strong>Beth — Millennial beauty professional (39).</strong> Works in a salon and studies, with a busy routine. Follows trends, uses tests to confirm her own perceptions, and wants an affordable alternative to in-person consultations that is as close as possible to the real thing.</p>
+
+    <h2>From insights to decisions</h2>
+    <table class="insight-table">
+      <tr><th>Insight</th><th>Decision in the new version</th></tr>
+      <tr><td>Users want to know how to use their colours</td><td>New result sections: <strong>In your wardrobe</strong>, <strong>Your personal style</strong>, <strong>Your beauty profile</strong></td></tr>
+      <tr><td>High interest in premium, uncertain payment</td><td><strong>Freemium model:</strong> full free result, plus an optional premium test with extra photos and a questionnaire</td></tr>
+      <tr><td>82% wanted style tips on the site</td><td><strong>Blog</strong></td></tr>
+      <tr><td>Personas value shareable, "aesthetic" results</td><td><strong>Share template</strong> for social media</td></tr>
+      <tr><td>Survey pop-up blocked the result</td><td>Pop-up delayed until the user reaches the end of the result</td></tr>
+    </table>
+
+    <h2>Outcome</h2>
+    <ul>
+      <li>New version presented at Web Summit Lisbon 2025.</li>
+      <li>New tiktests version: <a href="https://tiktests.com/" target="_blank" rel="noopener">tiktests.com</a></li>
+    </ul>
+    <img src="tiktests-site.gif" alt="Animated walkthrough of the new TikTests website" class="no-lightbox" style="width:100%;border-radius:var(--radius);margin:1.5rem 0;box-shadow:0 2px 12px rgba(0,0,0,.12)">
+
+    <div class="reflection-box">
+      <h3>Reflections</h3>
+      <ul>
+        <li><strong>Who was missing.</strong> The pop-up only reached people who finished the test, not those who dropped out. Next time I would add analytics and usability tests at the drop-off points.</li>
+        <li><strong>Research has a UX cost too.</strong> Users' complaints about the pop-up were a reminder that how and when we ask matters as much as what we ask.</li>
+        <li><strong>Personas need more voices.</strong> With two interviews, each persona rests mainly on one person. The survey helped me check them, but qualitative personas usually need at least 5 interviews per user group. They were useful for aligning the team quickly, and the next step would be more interviews to validate and segment them.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">&copy; 2026 Tainá Costa</div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" aria-label="Close">&times;</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+// Lightbox
+function openLightbox(src, alt) {
+  var lb = document.getElementById('lightbox');
+  var img = document.getElementById('lightbox-img');
+  img.src = src; img.alt = alt || '';
+  lb.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+document.addEventListener('click', function(e) {
+  var img = e.target;
+  if (img.tagName === 'IMG' && img.closest('.case-page') && !img.classList.contains('no-lightbox')) {
+    e.preventDefault();
+    openLightbox(img.src, img.alt);
+  }
+});
+
+function showCase(id) {
+  document.body.classList.add('case-open');
+  document.querySelectorAll('.case-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('case-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function showHome(e) {
+  if (e) e.preventDefault();
+  document.body.classList.remove('case-open');
+  document.querySelectorAll('.case-page').forEach(p => p.classList.remove('active'));
+  history.replaceState(null, '', window.location.pathname);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function navigateTo(sectionId, e) {
+  if (e) e.preventDefault();
+  document.body.classList.remove('case-open');
+  document.querySelectorAll('.case-page').forEach(p => p.classList.remove('active'));
+  var el = document.getElementById(sectionId);
+  if (el) {
+    history.replaceState(null, '', '#' + sectionId);
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+// Keyboard support for case study cards
+document.querySelectorAll('.case-study').forEach(card => {
+  card.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+  });
+});
+</script>
+
+</body>
+</html>
